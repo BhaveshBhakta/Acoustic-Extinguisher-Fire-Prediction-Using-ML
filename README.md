@@ -1,44 +1,47 @@
-## Sports Image Classification Using EfficientNetB0
+## Acoustic Extinguisher Fire Prediction
 
 ### Project Overview
 
-This project aims to classify **images of people performing various sports activities**. By leveraging a deep learning model with transfer learning from a pre-trained convolutional neural network, **EfficientNetB0**, the goal is to build an accurate image classification system that can distinguish between different sports. This has applications in sports analytics, media content tagging, and fitness applications.
+This project aims to predict the **status of a fire being extinguished acoustically**. By analyzing a dataset of fire extinguisher parameters such as the fire's size, fuel type, distance, decibel level, airflow, and frequency, the goal is to develop a machine learning model that can accurately determine if the fire is successfully extinguished. This is a novel and interesting application in fire safety.
 
 -----
 
 ### Technical Highlights
 
-  * **Dataset**: [Kaggle - Sports Classification](https://www.kaggle.com/datasets/gpiosenka/sports-classification)
-  * **Size**: The dataset contains 14,492 images, with a training set of 13,492 images, and validation and test sets of 500 images each.
-  * **Key Features**: The raw image data is used as input for the model.
+  * **Dataset**: A dataset named `Acoustic_Extinguisher_Fire_Dataset.xlsx`, which contains experimental data for acoustic fire extinguishing.
+  * **Size**: 17,442 entries, 7 columns.
+  * **Key Features**:
+      * `SIZE` (of the fire), `FUEL` (type), `DISTANCE` (from extinguisher), `DESIBEL`, `AIRFLOW`, `FREQUENCY`.
   * **Approach**:
-      * **Data Preparation**: A custom function was used to create pandas DataFrames from the image file paths and labels for the training, validation, and test sets.
-      * **Data Augmentation**: `ImageDataGenerator` was used to augment the training data with transformations like horizontal flips, to increase the dataset's variability and prevent overfitting.
-      * **Transfer Learning**: A pre-trained **EfficientNetB0** model, which was trained on a large image dataset (ImageNet), is used as a feature extractor. The base model's layers were frozen (`trainable=False`).
-      * **Model Architecture**: A custom deep learning model was built on top of the EfficientNetB0 base, featuring a `BatchNormalization` layer, `Dropout` layers, and `Dense` layers for classification. The final `Dense` layer has 10 units with a `softmax` activation for multi-class classification.
-      * **Training**: The model was compiled with the Adam optimizer and `categorical_crossentropy` loss. It was trained for 80 epochs.
+      * **Data Cleaning**: The dataset was clean with no missing values or duplicates.
+      * **Exploratory Data Analysis**: Histograms, box plots, and scatter plots were used for visualization to understand data distributions and feature relationships. A `countplot` showed a balanced distribution for the target `STATUS`.
+      * **Data Preprocessing**: Categorical features like `FUEL` were converted into numerical features using **One-Hot Encoding** via `pd.get_dummies`.
+      * **Binary Classification**: The target variable `STATUS` indicates whether the fire was extinguished (`1`) or not (`0`).
+      * **Models Used**:
+          * A suite of regression models were trained, including Ridge, XGBoost, Random Forest, AdaBoost, Gradient Boosting, and Bagging. These regression models' outputs were then converted to binary classes for classification evaluation.
   * **Best Accuracy**:
-      * The model achieved a training accuracy of \~98.1% and a validation accuracy of **93.9%** in the best epoch. The final evaluation on the validation set resulted in a loss of \~0.26 and an accuracy of **91.8%**.
+      * **97.4%** with Random Forest Regressor.
+      * **97.2%** with XGBoost Regressor.
+      * **97.1%** with Bagging Regressor.
+      * The extremely high accuracies for the ensemble models indicate that the input features are very effective at predicting fire extinction.
 
 -----
 
 ### Purpose and Applications
 
-  * **Automated Sports Content Tagging**: Automatically tag sports images for media and broadcasting.
-  * **Sports Analytics**: Analyze and categorize sports actions and movements from video feeds.
-  * **Fitness Applications**: Identify and track different exercises in fitness apps.
-  * **Computer Vision**: Provides a practical example of transfer learning for image classification tasks with a moderately sized dataset.
+  * **Acoustic Fire Extinguishing**: Enable the development of automated acoustic fire extinguishing systems.
+  * **Fire Safety**: Provide a data-driven tool to optimize the parameters (decibel, frequency, etc.) of an acoustic extinguisher for maximum effectiveness.
+  * **Research**: Support research in fire science and novel extinguishing technologies.
+  * **Robotics**: Serve as a foundational model for a robotic fire extinguisher that can autonomously respond to fires.
 
 -----
 
 ### Installation
 
-Clone the repository and extract the data from the zip file.
-
 Install the necessary libraries:
 
 ```bash
-pip install tensorflow keras pandas numpy seaborn matplotlib scikit-learn
+pip install pandas numpy seaborn matplotlib scikit-learn xgboost openpyxl
 ```
 
 -----
@@ -47,7 +50,7 @@ pip install tensorflow keras pandas numpy seaborn matplotlib scikit-learn
 
 We welcome contributions to improve the project. You can help by:
 
-  * Fine-tuning the hyperparameters of the custom head and training process to further optimize performance.
-  * Exploring different pre-trained models to compare their effectiveness.
-  * Implementing more robust data augmentation or preprocessing techniques.
-  * Adding a more detailed evaluation on the test set, including a classification report and confusion matrix, to validate the model's performance on unseen data.
+  * Re-evaluating the approach of using regression models for a classification task and directly using classification models.
+  * Performing comprehensive hyperparameter tuning and cross-validation for the top-performing models to ensure robustness.
+  * Investigating the impact of the data preprocessing steps and trying alternative encoding methods.
+  * Adding explainability (e.g., SHAP or LIME) to understand which parameters are the most critical for acoustic fire extinction.
